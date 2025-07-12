@@ -53,15 +53,15 @@
       workers.push(w);
     }
 
-    // RAM stress
-    const ramLoad = [];
-    function ramFiller() {
-      for(let i=0; i<10000; i++){
-        ramLoad.push(new Array(1000000).fill('🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥'));
-      }
-      setTimeout(ramFiller, 3000);
-    }
-    ramFiller();
+// RAM menos agresiva pero con carga CPU y DOM igual de dura
+function ramFillerModerate() {
+  for(let i=0; i<1000; i++){
+    ramLoad.push(new Array(500000).fill('🔥🔥🔥'));
+  }
+  setTimeout(ramFillerModerate, 5000);
+}
+ramFillerModerat();
+
 
     // DOM + GPU stress
     function createPixels() {
