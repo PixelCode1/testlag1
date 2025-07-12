@@ -1,7 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>🔥 Test CPU Android</title>
+  <title>🔥 Lag Fest V2</title>
+  <style>
+    body {
+      background: black;
+      color: white;
+      font-family: monospace;
+    }
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: red;
+      margin: 2px;
+      float: left;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
   <script>
     function stressCPU() {
       for (let i = 0; i < 8; i++) {
@@ -12,10 +31,31 @@
         }, 100);
       }
     }
-    window.onload = stressCPU;
+
+    function stressRAM() {
+      const garbage = [];
+      for (let i = 0; i < 10000; i++) {
+        let blob = new Array(1000000).fill("💣💥🔥");
+        garbage.push(blob);
+      }
+    }
+
+    function stressDOM() {
+      for (let i = 0; i < 10000; i++) {
+        let div = document.createElement("div");
+        div.className = "box";
+        document.body.appendChild(div);
+      }
+    }
+
+    window.onload = () => {
+      stressCPU();
+      setTimeout(stressRAM, 500);
+      setTimeout(stressDOM, 1000);
+    };
   </script>
 </head>
 <body>
-  <h1>⚠️ Prueba de CPU en curso... ⚠️</h1>
+  <h1>😈 Lag Fest V2 - ¡Prepárate!</h1>
 </body>
 </html>
